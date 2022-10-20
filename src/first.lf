@@ -1,0 +1,54 @@
+target Cpp{
+    tracing: true,
+    export-to-yaml: true
+}
+
+main reactor {
+
+    one = new One()
+    two = new Two()
+    three = new Three()
+    
+    one.y1 -> two.x2;
+    two.y2 -> three.x3;
+}
+
+reactor One{
+
+    public preamble {=
+
+        #ifdef _WIN32
+        #include <Windows.h>
+        #else
+        #include <unistd.h>
+        #endif
+
+    =}
+    
+    output y1:int;    
+
+    reaction(startup) -> y1 {=
+        sleep(2);
+        y1.set(0);
+    =}
+}
+
+reactor Two{
+
+    input x2:int;
+    output y2:int;
+
+    reaction(x2) -> y2 {=
+        sleep(2);
+        y2.set(0);
+    =}
+}
+
+reactor Three{
+
+    input x3:int;    
+
+    reaction(x3) {=
+        sleep(2);        
+    =}
+}
