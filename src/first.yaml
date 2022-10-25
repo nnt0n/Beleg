@@ -1,0 +1,130 @@
+---
+top_level_instances:
+  - first
+all_reactor_instances:
+  first:
+    name: first
+    container: null
+    reactor_instances:
+      - first.one
+      - first.two
+      - first.three
+    inputs:
+    outputs:
+    triggers:
+      - name: startup
+        type: startup
+        trigger_of:
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+  first.one:
+    name: one
+    container: first
+    reactor_instances:
+    inputs:
+    outputs:
+      y1:
+        upstream_port: null
+        downstream_ports: 
+          - first.two.x2
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - first.one.reaction_1
+    triggers:
+      - name: startup
+        type: startup
+        trigger_of:
+          - first.one.reaction_1
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 0
+        triggers:
+          - first.one.startup
+        sources:
+        effects:
+          - first.one.y1
+  first.two:
+    name: two
+    container: first
+    reactor_instances:
+    inputs:
+      x2:
+        upstream_port: first.one.y1
+        downstream_ports: 
+        trigger_of: 
+          - first.two.reaction_1
+        source_of: 
+        effect_of: 
+    outputs:
+      y2:
+        upstream_port: null
+        downstream_ports: 
+          - first.three.x3
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - first.two.reaction_1
+    triggers:
+      - name: startup
+        type: startup
+        trigger_of:
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 1
+        triggers:
+          - first.two.x2
+        sources:
+        effects:
+          - first.two.y2
+  first.three:
+    name: three
+    container: first
+    reactor_instances:
+    inputs:
+      x3:
+        upstream_port: first.two.y2
+        downstream_ports: 
+        trigger_of: 
+          - first.three.reaction_1
+        source_of: 
+        effect_of: 
+    outputs:
+    triggers:
+      - name: startup
+        type: startup
+        trigger_of:
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 2
+        triggers:
+          - first.three.x3
+        sources:
+        effects:
+reaction_dependencies:
+  - from: first.two.reaction_1
+  - to: first.one.reaction_1
+  - from: first.three.reaction_1
+  - to: first.two.reaction_1
