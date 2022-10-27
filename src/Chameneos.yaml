@@ -1,0 +1,1041 @@
+---
+top_level_instances:
+  - Chameneos
+all_reactor_instances:
+  Chameneos:
+    name: Chameneos
+    container: null
+    reactor_instances:
+      - Chameneos.mall
+      - Chameneos.runner
+      - Chameneos.chameneos_0
+      - Chameneos.chameneos_1
+      - Chameneos.chameneos_2
+      - Chameneos.chameneos_3
+      - Chameneos.chameneos_4
+    inputs:
+    outputs:
+    triggers:
+      - name: startup
+        type: startup
+        trigger_of:
+          - Chameneos.reaction_1
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 0
+        triggers:
+          - Chameneos.startup
+        sources:
+        effects:
+  Chameneos.mall:
+    name: mall
+    container: Chameneos
+    reactor_instances:
+    inputs:
+      inStart:
+        upstream_port: Chameneos.runner.start
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.mall.reaction_1
+        source_of: 
+        effect_of: 
+      inChameneos_0:
+        upstream_port: Chameneos.chameneos_0.outMall
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.mall.reaction_3
+        source_of: 
+        effect_of: 
+      inChameneos_1:
+        upstream_port: Chameneos.chameneos_1.outMall
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.mall.reaction_3
+        source_of: 
+        effect_of: 
+      inChameneos_2:
+        upstream_port: Chameneos.chameneos_2.outMall
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.mall.reaction_3
+        source_of: 
+        effect_of: 
+      inChameneos_3:
+        upstream_port: Chameneos.chameneos_3.outMall
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.mall.reaction_3
+        source_of: 
+        effect_of: 
+      inChameneos_4:
+        upstream_port: Chameneos.chameneos_4.outMall
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.mall.reaction_3
+        source_of: 
+        effect_of: 
+    outputs:
+      outFinished:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.runner.finished
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.mall.reaction_3
+      outChameneos_0:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_0.inMall
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.mall.reaction_1
+          - Chameneos.mall.reaction_2
+      outChameneos_1:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_1.inMall
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.mall.reaction_1
+          - Chameneos.mall.reaction_2
+      outChameneos_2:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_2.inMall
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.mall.reaction_1
+          - Chameneos.mall.reaction_2
+      outChameneos_3:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_3.inMall
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.mall.reaction_1
+          - Chameneos.mall.reaction_2
+      outChameneos_4:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_4.inMall
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.mall.reaction_1
+          - Chameneos.mall.reaction_2
+    triggers:
+      - name: pairChameneos
+        type: logical action
+        trigger_of:
+          - Chameneos.mall.reaction_2
+        effect_of:
+          - Chameneos.mall.reaction_3
+      - name: startup
+        type: startup
+        trigger_of:
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 2
+        triggers:
+          - Chameneos.mall.inStart
+        sources:
+        effects:
+          - Chameneos.mall.outChameneos_0
+          - Chameneos.mall.outChameneos_1
+          - Chameneos.mall.outChameneos_2
+          - Chameneos.mall.outChameneos_3
+          - Chameneos.mall.outChameneos_4
+      - name: reaction_2
+        priority: 2
+        level: 3
+        triggers:
+          - Chameneos.mall.pairChameneos
+        sources:
+        effects:
+          - Chameneos.mall.outChameneos_0
+          - Chameneos.mall.outChameneos_1
+          - Chameneos.mall.outChameneos_2
+          - Chameneos.mall.outChameneos_3
+          - Chameneos.mall.outChameneos_4
+      - name: reaction_3
+        priority: 3
+        level: 6
+        triggers:
+          - Chameneos.mall.inChameneos_0
+          - Chameneos.mall.inChameneos_1
+          - Chameneos.mall.inChameneos_2
+          - Chameneos.mall.inChameneos_3
+          - Chameneos.mall.inChameneos_4
+        sources:
+        effects:
+          - Chameneos.mall.outFinished
+          - Chameneos.mall.pairChameneos
+  Chameneos.runner:
+    name: runner
+    container: Chameneos
+    reactor_instances:
+    inputs:
+      finished:
+        upstream_port: Chameneos.mall.outFinished
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.runner.reaction_3
+        source_of: 
+        effect_of: 
+    outputs:
+      start:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.mall.inStart
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.runner.reaction_2
+    triggers:
+      - name: nextIteration
+        type: logical action
+        trigger_of:
+          - Chameneos.runner.reaction_2
+        effect_of:
+          - Chameneos.runner.reaction_1
+          - Chameneos.runner.reaction_3
+      - name: done
+        type: logical action
+        trigger_of:
+          - Chameneos.runner.reaction_4
+        effect_of:
+          - Chameneos.runner.reaction_3
+      - name: startup
+        type: startup
+        trigger_of:
+          - Chameneos.runner.reaction_1
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 0
+        triggers:
+          - Chameneos.runner.startup
+        sources:
+        effects:
+          - Chameneos.runner.nextIteration
+      - name: reaction_2
+        priority: 2
+        level: 1
+        triggers:
+          - Chameneos.runner.nextIteration
+        sources:
+        effects:
+          - Chameneos.runner.start
+      - name: reaction_3
+        priority: 3
+        level: 7
+        triggers:
+          - Chameneos.runner.finished
+        sources:
+        effects:
+          - Chameneos.runner.nextIteration
+          - Chameneos.runner.done
+      - name: reaction_4
+        priority: 4
+        level: 8
+        triggers:
+          - Chameneos.runner.done
+        sources:
+        effects:
+  Chameneos.chameneos_0:
+    name: chameneos_0
+    container: Chameneos
+    reactor_instances:
+    inputs:
+      inMall:
+        upstream_port: Chameneos.mall.outChameneos_0
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_0.reaction_1
+        source_of: 
+        effect_of: 
+      inChameneos_0:
+        upstream_port: Chameneos.chameneos_0.outChameneos_0
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_0.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_1:
+        upstream_port: Chameneos.chameneos_1.outChameneos_0
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_0.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_2:
+        upstream_port: Chameneos.chameneos_2.outChameneos_0
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_0.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_3:
+        upstream_port: Chameneos.chameneos_3.outChameneos_0
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_0.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_4:
+        upstream_port: Chameneos.chameneos_4.outChameneos_0
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_0.reaction_2
+        source_of: 
+        effect_of: 
+    outputs:
+      outMall:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.mall.inChameneos_0
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_0.reaction_1
+          - Chameneos.chameneos_0.reaction_2
+      outChameneos_0:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_0.inChameneos_0
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_0.reaction_1
+      outChameneos_1:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_1.inChameneos_0
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_0.reaction_1
+      outChameneos_2:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_2.inChameneos_0
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_0.reaction_1
+      outChameneos_3:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_3.inChameneos_0
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_0.reaction_1
+      outChameneos_4:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_4.inChameneos_0
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_0.reaction_1
+    triggers:
+      - name: startup
+        type: startup
+        trigger_of:
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 4
+        triggers:
+          - Chameneos.chameneos_0.inMall
+        sources:
+        effects:
+          - Chameneos.chameneos_0.outMall
+          - Chameneos.chameneos_0.outChameneos_0
+          - Chameneos.chameneos_0.outChameneos_1
+          - Chameneos.chameneos_0.outChameneos_2
+          - Chameneos.chameneos_0.outChameneos_3
+          - Chameneos.chameneos_0.outChameneos_4
+      - name: reaction_2
+        priority: 2
+        level: 5
+        triggers:
+          - Chameneos.chameneos_0.inChameneos_0
+          - Chameneos.chameneos_0.inChameneos_1
+          - Chameneos.chameneos_0.inChameneos_2
+          - Chameneos.chameneos_0.inChameneos_3
+          - Chameneos.chameneos_0.inChameneos_4
+        sources:
+        effects:
+          - Chameneos.chameneos_0.outMall
+  Chameneos.chameneos_1:
+    name: chameneos_1
+    container: Chameneos
+    reactor_instances:
+    inputs:
+      inMall:
+        upstream_port: Chameneos.mall.outChameneos_1
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_1.reaction_1
+        source_of: 
+        effect_of: 
+      inChameneos_0:
+        upstream_port: Chameneos.chameneos_0.outChameneos_1
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_1.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_1:
+        upstream_port: Chameneos.chameneos_1.outChameneos_1
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_1.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_2:
+        upstream_port: Chameneos.chameneos_2.outChameneos_1
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_1.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_3:
+        upstream_port: Chameneos.chameneos_3.outChameneos_1
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_1.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_4:
+        upstream_port: Chameneos.chameneos_4.outChameneos_1
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_1.reaction_2
+        source_of: 
+        effect_of: 
+    outputs:
+      outMall:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.mall.inChameneos_1
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_1.reaction_1
+          - Chameneos.chameneos_1.reaction_2
+      outChameneos_0:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_0.inChameneos_1
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_1.reaction_1
+      outChameneos_1:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_1.inChameneos_1
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_1.reaction_1
+      outChameneos_2:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_2.inChameneos_1
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_1.reaction_1
+      outChameneos_3:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_3.inChameneos_1
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_1.reaction_1
+      outChameneos_4:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_4.inChameneos_1
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_1.reaction_1
+    triggers:
+      - name: startup
+        type: startup
+        trigger_of:
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 4
+        triggers:
+          - Chameneos.chameneos_1.inMall
+        sources:
+        effects:
+          - Chameneos.chameneos_1.outMall
+          - Chameneos.chameneos_1.outChameneos_0
+          - Chameneos.chameneos_1.outChameneos_1
+          - Chameneos.chameneos_1.outChameneos_2
+          - Chameneos.chameneos_1.outChameneos_3
+          - Chameneos.chameneos_1.outChameneos_4
+      - name: reaction_2
+        priority: 2
+        level: 5
+        triggers:
+          - Chameneos.chameneos_1.inChameneos_0
+          - Chameneos.chameneos_1.inChameneos_1
+          - Chameneos.chameneos_1.inChameneos_2
+          - Chameneos.chameneos_1.inChameneos_3
+          - Chameneos.chameneos_1.inChameneos_4
+        sources:
+        effects:
+          - Chameneos.chameneos_1.outMall
+  Chameneos.chameneos_2:
+    name: chameneos_2
+    container: Chameneos
+    reactor_instances:
+    inputs:
+      inMall:
+        upstream_port: Chameneos.mall.outChameneos_2
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_2.reaction_1
+        source_of: 
+        effect_of: 
+      inChameneos_0:
+        upstream_port: Chameneos.chameneos_0.outChameneos_2
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_2.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_1:
+        upstream_port: Chameneos.chameneos_1.outChameneos_2
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_2.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_2:
+        upstream_port: Chameneos.chameneos_2.outChameneos_2
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_2.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_3:
+        upstream_port: Chameneos.chameneos_3.outChameneos_2
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_2.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_4:
+        upstream_port: Chameneos.chameneos_4.outChameneos_2
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_2.reaction_2
+        source_of: 
+        effect_of: 
+    outputs:
+      outMall:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.mall.inChameneos_2
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_2.reaction_1
+          - Chameneos.chameneos_2.reaction_2
+      outChameneos_0:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_0.inChameneos_2
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_2.reaction_1
+      outChameneos_1:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_1.inChameneos_2
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_2.reaction_1
+      outChameneos_2:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_2.inChameneos_2
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_2.reaction_1
+      outChameneos_3:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_3.inChameneos_2
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_2.reaction_1
+      outChameneos_4:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_4.inChameneos_2
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_2.reaction_1
+    triggers:
+      - name: startup
+        type: startup
+        trigger_of:
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 4
+        triggers:
+          - Chameneos.chameneos_2.inMall
+        sources:
+        effects:
+          - Chameneos.chameneos_2.outMall
+          - Chameneos.chameneos_2.outChameneos_0
+          - Chameneos.chameneos_2.outChameneos_1
+          - Chameneos.chameneos_2.outChameneos_2
+          - Chameneos.chameneos_2.outChameneos_3
+          - Chameneos.chameneos_2.outChameneos_4
+      - name: reaction_2
+        priority: 2
+        level: 5
+        triggers:
+          - Chameneos.chameneos_2.inChameneos_0
+          - Chameneos.chameneos_2.inChameneos_1
+          - Chameneos.chameneos_2.inChameneos_2
+          - Chameneos.chameneos_2.inChameneos_3
+          - Chameneos.chameneos_2.inChameneos_4
+        sources:
+        effects:
+          - Chameneos.chameneos_2.outMall
+  Chameneos.chameneos_3:
+    name: chameneos_3
+    container: Chameneos
+    reactor_instances:
+    inputs:
+      inMall:
+        upstream_port: Chameneos.mall.outChameneos_3
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_3.reaction_1
+        source_of: 
+        effect_of: 
+      inChameneos_0:
+        upstream_port: Chameneos.chameneos_0.outChameneos_3
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_3.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_1:
+        upstream_port: Chameneos.chameneos_1.outChameneos_3
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_3.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_2:
+        upstream_port: Chameneos.chameneos_2.outChameneos_3
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_3.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_3:
+        upstream_port: Chameneos.chameneos_3.outChameneos_3
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_3.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_4:
+        upstream_port: Chameneos.chameneos_4.outChameneos_3
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_3.reaction_2
+        source_of: 
+        effect_of: 
+    outputs:
+      outMall:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.mall.inChameneos_3
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_3.reaction_1
+          - Chameneos.chameneos_3.reaction_2
+      outChameneos_0:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_0.inChameneos_3
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_3.reaction_1
+      outChameneos_1:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_1.inChameneos_3
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_3.reaction_1
+      outChameneos_2:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_2.inChameneos_3
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_3.reaction_1
+      outChameneos_3:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_3.inChameneos_3
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_3.reaction_1
+      outChameneos_4:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_4.inChameneos_3
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_3.reaction_1
+    triggers:
+      - name: startup
+        type: startup
+        trigger_of:
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 4
+        triggers:
+          - Chameneos.chameneos_3.inMall
+        sources:
+        effects:
+          - Chameneos.chameneos_3.outMall
+          - Chameneos.chameneos_3.outChameneos_0
+          - Chameneos.chameneos_3.outChameneos_1
+          - Chameneos.chameneos_3.outChameneos_2
+          - Chameneos.chameneos_3.outChameneos_3
+          - Chameneos.chameneos_3.outChameneos_4
+      - name: reaction_2
+        priority: 2
+        level: 5
+        triggers:
+          - Chameneos.chameneos_3.inChameneos_0
+          - Chameneos.chameneos_3.inChameneos_1
+          - Chameneos.chameneos_3.inChameneos_2
+          - Chameneos.chameneos_3.inChameneos_3
+          - Chameneos.chameneos_3.inChameneos_4
+        sources:
+        effects:
+          - Chameneos.chameneos_3.outMall
+  Chameneos.chameneos_4:
+    name: chameneos_4
+    container: Chameneos
+    reactor_instances:
+    inputs:
+      inMall:
+        upstream_port: Chameneos.mall.outChameneos_4
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_4.reaction_1
+        source_of: 
+        effect_of: 
+      inChameneos_0:
+        upstream_port: Chameneos.chameneos_0.outChameneos_4
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_4.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_1:
+        upstream_port: Chameneos.chameneos_1.outChameneos_4
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_4.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_2:
+        upstream_port: Chameneos.chameneos_2.outChameneos_4
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_4.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_3:
+        upstream_port: Chameneos.chameneos_3.outChameneos_4
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_4.reaction_2
+        source_of: 
+        effect_of: 
+      inChameneos_4:
+        upstream_port: Chameneos.chameneos_4.outChameneos_4
+        downstream_ports: 
+        trigger_of: 
+          - Chameneos.chameneos_4.reaction_2
+        source_of: 
+        effect_of: 
+    outputs:
+      outMall:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.mall.inChameneos_4
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_4.reaction_1
+          - Chameneos.chameneos_4.reaction_2
+      outChameneos_0:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_0.inChameneos_4
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_4.reaction_1
+      outChameneos_1:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_1.inChameneos_4
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_4.reaction_1
+      outChameneos_2:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_2.inChameneos_4
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_4.reaction_1
+      outChameneos_3:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_3.inChameneos_4
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_4.reaction_1
+      outChameneos_4:
+        upstream_port: null
+        downstream_ports: 
+          - Chameneos.chameneos_4.inChameneos_4
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Chameneos.chameneos_4.reaction_1
+    triggers:
+      - name: startup
+        type: startup
+        trigger_of:
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 4
+        triggers:
+          - Chameneos.chameneos_4.inMall
+        sources:
+        effects:
+          - Chameneos.chameneos_4.outMall
+          - Chameneos.chameneos_4.outChameneos_0
+          - Chameneos.chameneos_4.outChameneos_1
+          - Chameneos.chameneos_4.outChameneos_2
+          - Chameneos.chameneos_4.outChameneos_3
+          - Chameneos.chameneos_4.outChameneos_4
+      - name: reaction_2
+        priority: 2
+        level: 5
+        triggers:
+          - Chameneos.chameneos_4.inChameneos_0
+          - Chameneos.chameneos_4.inChameneos_1
+          - Chameneos.chameneos_4.inChameneos_2
+          - Chameneos.chameneos_4.inChameneos_3
+          - Chameneos.chameneos_4.inChameneos_4
+        sources:
+        effects:
+          - Chameneos.chameneos_4.outMall
+reaction_dependencies:
+  - from: Chameneos.mall.reaction_1
+  - to: Chameneos.runner.reaction_2
+  - from: Chameneos.mall.reaction_3
+  - to: Chameneos.chameneos_0.reaction_1
+  - from: Chameneos.mall.reaction_3
+  - to: Chameneos.chameneos_0.reaction_2
+  - from: Chameneos.mall.reaction_3
+  - to: Chameneos.chameneos_1.reaction_1
+  - from: Chameneos.mall.reaction_3
+  - to: Chameneos.chameneos_1.reaction_2
+  - from: Chameneos.mall.reaction_3
+  - to: Chameneos.chameneos_2.reaction_1
+  - from: Chameneos.mall.reaction_3
+  - to: Chameneos.chameneos_2.reaction_2
+  - from: Chameneos.mall.reaction_3
+  - to: Chameneos.chameneos_3.reaction_1
+  - from: Chameneos.mall.reaction_3
+  - to: Chameneos.chameneos_3.reaction_2
+  - from: Chameneos.mall.reaction_3
+  - to: Chameneos.chameneos_4.reaction_1
+  - from: Chameneos.mall.reaction_3
+  - to: Chameneos.chameneos_4.reaction_2
+  - from: Chameneos.mall.reaction_2
+  - to: Chameneos.mall.reaction_1
+  - from: Chameneos.mall.reaction_3
+  - to: Chameneos.mall.reaction_2
+  - from: Chameneos.runner.reaction_3
+  - to: Chameneos.mall.reaction_3
+  - from: Chameneos.runner.reaction_2
+  - to: Chameneos.runner.reaction_1
+  - from: Chameneos.runner.reaction_3
+  - to: Chameneos.runner.reaction_2
+  - from: Chameneos.runner.reaction_4
+  - to: Chameneos.runner.reaction_3
+  - from: Chameneos.chameneos_0.reaction_1
+  - to: Chameneos.mall.reaction_1
+  - from: Chameneos.chameneos_0.reaction_1
+  - to: Chameneos.mall.reaction_2
+  - from: Chameneos.chameneos_0.reaction_2
+  - to: Chameneos.chameneos_0.reaction_1
+  - from: Chameneos.chameneos_0.reaction_2
+  - to: Chameneos.chameneos_1.reaction_1
+  - from: Chameneos.chameneos_0.reaction_2
+  - to: Chameneos.chameneos_2.reaction_1
+  - from: Chameneos.chameneos_0.reaction_2
+  - to: Chameneos.chameneos_3.reaction_1
+  - from: Chameneos.chameneos_0.reaction_2
+  - to: Chameneos.chameneos_4.reaction_1
+  - from: Chameneos.chameneos_0.reaction_2
+  - to: Chameneos.chameneos_0.reaction_1
+  - from: Chameneos.chameneos_1.reaction_1
+  - to: Chameneos.mall.reaction_1
+  - from: Chameneos.chameneos_1.reaction_1
+  - to: Chameneos.mall.reaction_2
+  - from: Chameneos.chameneos_1.reaction_2
+  - to: Chameneos.chameneos_0.reaction_1
+  - from: Chameneos.chameneos_1.reaction_2
+  - to: Chameneos.chameneos_1.reaction_1
+  - from: Chameneos.chameneos_1.reaction_2
+  - to: Chameneos.chameneos_2.reaction_1
+  - from: Chameneos.chameneos_1.reaction_2
+  - to: Chameneos.chameneos_3.reaction_1
+  - from: Chameneos.chameneos_1.reaction_2
+  - to: Chameneos.chameneos_4.reaction_1
+  - from: Chameneos.chameneos_1.reaction_2
+  - to: Chameneos.chameneos_1.reaction_1
+  - from: Chameneos.chameneos_2.reaction_1
+  - to: Chameneos.mall.reaction_1
+  - from: Chameneos.chameneos_2.reaction_1
+  - to: Chameneos.mall.reaction_2
+  - from: Chameneos.chameneos_2.reaction_2
+  - to: Chameneos.chameneos_0.reaction_1
+  - from: Chameneos.chameneos_2.reaction_2
+  - to: Chameneos.chameneos_1.reaction_1
+  - from: Chameneos.chameneos_2.reaction_2
+  - to: Chameneos.chameneos_2.reaction_1
+  - from: Chameneos.chameneos_2.reaction_2
+  - to: Chameneos.chameneos_3.reaction_1
+  - from: Chameneos.chameneos_2.reaction_2
+  - to: Chameneos.chameneos_4.reaction_1
+  - from: Chameneos.chameneos_2.reaction_2
+  - to: Chameneos.chameneos_2.reaction_1
+  - from: Chameneos.chameneos_3.reaction_1
+  - to: Chameneos.mall.reaction_1
+  - from: Chameneos.chameneos_3.reaction_1
+  - to: Chameneos.mall.reaction_2
+  - from: Chameneos.chameneos_3.reaction_2
+  - to: Chameneos.chameneos_0.reaction_1
+  - from: Chameneos.chameneos_3.reaction_2
+  - to: Chameneos.chameneos_1.reaction_1
+  - from: Chameneos.chameneos_3.reaction_2
+  - to: Chameneos.chameneos_2.reaction_1
+  - from: Chameneos.chameneos_3.reaction_2
+  - to: Chameneos.chameneos_3.reaction_1
+  - from: Chameneos.chameneos_3.reaction_2
+  - to: Chameneos.chameneos_4.reaction_1
+  - from: Chameneos.chameneos_3.reaction_2
+  - to: Chameneos.chameneos_3.reaction_1
+  - from: Chameneos.chameneos_4.reaction_1
+  - to: Chameneos.mall.reaction_1
+  - from: Chameneos.chameneos_4.reaction_1
+  - to: Chameneos.mall.reaction_2
+  - from: Chameneos.chameneos_4.reaction_2
+  - to: Chameneos.chameneos_0.reaction_1
+  - from: Chameneos.chameneos_4.reaction_2
+  - to: Chameneos.chameneos_1.reaction_1
+  - from: Chameneos.chameneos_4.reaction_2
+  - to: Chameneos.chameneos_2.reaction_1
+  - from: Chameneos.chameneos_4.reaction_2
+  - to: Chameneos.chameneos_3.reaction_1
+  - from: Chameneos.chameneos_4.reaction_2
+  - to: Chameneos.chameneos_4.reaction_1
+  - from: Chameneos.chameneos_4.reaction_2
+  - to: Chameneos.chameneos_4.reaction_1

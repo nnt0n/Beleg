@@ -1,0 +1,19 @@
+digraph G {
+"process_runner.2" [label="runner.2"];
+"process_ping.1" [label="ping.1"];
+"process_pong.1" [label="pong.1"];
+"process_ping.3" [label="ping.3"];
+"process_ping.2" [label="ping.2"];
+"process_runner.3" [label="runner.3"];
+"process_runner.1" [label="runner.1"];
+"process_runner.4" [label="runner.4"];
+"process_runner.2" -> "process_ping.1"  [label=c0];
+"process_pong.1" -> "process_ping.3"  [label=c1];
+"process_ping.1" -> "process_ping.2"  [label=c2];
+"process_ping.2" -> "process_ping.3"  [label=c3];
+"process_ping.3" -> "process_runner.3"  [label=c4];
+"process_runner.1" -> "process_runner.2"  [label=c5];
+"process_runner.2" -> "process_runner.3"  [label=c6];
+"process_runner.3" -> "process_runner.4"  [label=c7];
+"process_ping.2" -> "process_pong.1"  [label=c8];
+}

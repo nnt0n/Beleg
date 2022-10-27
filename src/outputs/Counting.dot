@@ -1,0 +1,25 @@
+digraph G {
+"process_runner.2" [label="runner.2"];
+"process_producer.1" [label="producer.1"];
+"process_counter.3" [label="counter.3"];
+"process_producer.3" [label="producer.3"];
+"process_producer.2" [label="producer.2"];
+"process_runner.3" [label="runner.3"];
+"process_runner.1" [label="runner.1"];
+"process_runner.4" [label="runner.4"];
+"process_counter.1" [label="counter.1"];
+"process_counter.2" [label="counter.2"];
+"process_runner.2" -> "process_producer.1"  [label=c0];
+"process_counter.3" -> "process_producer.3"  [label=c1];
+"process_producer.1" -> "process_producer.2"  [label=c2];
+"process_producer.2" -> "process_producer.3"  [label=c3];
+"process_producer.3" -> "process_runner.3"  [label=c4];
+"process_runner.1" -> "process_runner.2"  [label=c5];
+"process_runner.2" -> "process_runner.3"  [label=c6];
+"process_runner.3" -> "process_runner.4"  [label=c7];
+"process_producer.1" -> "process_counter.1"  [label=c8];
+"process_producer.2" -> "process_counter.2"  [label=c9];
+"process_producer.2" -> "process_counter.3"  [label=c10];
+"process_counter.1" -> "process_counter.2"  [label=c11];
+"process_counter.2" -> "process_counter.3"  [label=c12];
+}

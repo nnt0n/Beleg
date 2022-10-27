@@ -1,0 +1,298 @@
+---
+top_level_instances:
+  - Counting
+all_reactor_instances:
+  Counting:
+    name: Counting
+    container: null
+    reactor_instances:
+      - Counting.producer
+      - Counting.runner
+      - Counting.counter
+    inputs:
+    outputs:
+    triggers:
+      - name: startup
+        type: startup
+        trigger_of:
+          - Counting.reaction_1
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 0
+        triggers:
+          - Counting.startup
+        sources:
+        effects:
+  Counting.producer:
+    name: producer
+    container: Counting
+    reactor_instances:
+    inputs:
+      inStartCounting:
+        upstream_port: Counting.runner.start
+        downstream_ports: 
+        trigger_of: 
+          - Counting.producer.reaction_1
+        source_of: 
+        effect_of: 
+      inResult:
+        upstream_port: Counting.counter.outSendResult
+        downstream_ports: 
+        trigger_of: 
+          - Counting.producer.reaction_3
+        source_of: 
+        effect_of: 
+    outputs:
+      outFinishedCounting:
+        upstream_port: null
+        downstream_ports: 
+          - Counting.runner.finished
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Counting.producer.reaction_3
+      outResetCounter:
+        upstream_port: null
+        downstream_ports: 
+          - Counting.counter.inReset
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Counting.producer.reaction_1
+      outIncrement:
+        upstream_port: null
+        downstream_ports: 
+          - Counting.counter.inIncrement
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Counting.producer.reaction_2
+      outRetrieveResult:
+        upstream_port: null
+        downstream_ports: 
+          - Counting.counter.inRetrieveResult
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Counting.producer.reaction_2
+    triggers:
+      - name: count
+        type: logical action
+        trigger_of:
+          - Counting.producer.reaction_2
+        effect_of:
+          - Counting.producer.reaction_1
+          - Counting.producer.reaction_2
+      - name: startup
+        type: startup
+        trigger_of:
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 2
+        triggers:
+          - Counting.producer.inStartCounting
+        sources:
+        effects:
+          - Counting.producer.outResetCounter
+          - Counting.producer.count
+      - name: reaction_2
+        priority: 2
+        level: 3
+        triggers:
+          - Counting.producer.count
+        sources:
+        effects:
+          - Counting.producer.outIncrement
+          - Counting.producer.outRetrieveResult
+          - Counting.producer.count
+      - name: reaction_3
+        priority: 3
+        level: 6
+        triggers:
+          - Counting.producer.inResult
+        sources:
+        effects:
+          - Counting.producer.outFinishedCounting
+  Counting.runner:
+    name: runner
+    container: Counting
+    reactor_instances:
+    inputs:
+      finished:
+        upstream_port: Counting.producer.outFinishedCounting
+        downstream_ports: 
+        trigger_of: 
+          - Counting.runner.reaction_3
+        source_of: 
+        effect_of: 
+    outputs:
+      start:
+        upstream_port: null
+        downstream_ports: 
+          - Counting.producer.inStartCounting
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Counting.runner.reaction_2
+    triggers:
+      - name: nextIteration
+        type: logical action
+        trigger_of:
+          - Counting.runner.reaction_2
+        effect_of:
+          - Counting.runner.reaction_1
+          - Counting.runner.reaction_3
+      - name: done
+        type: logical action
+        trigger_of:
+          - Counting.runner.reaction_4
+        effect_of:
+          - Counting.runner.reaction_3
+      - name: startup
+        type: startup
+        trigger_of:
+          - Counting.runner.reaction_1
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 0
+        triggers:
+          - Counting.runner.startup
+        sources:
+        effects:
+          - Counting.runner.nextIteration
+      - name: reaction_2
+        priority: 2
+        level: 1
+        triggers:
+          - Counting.runner.nextIteration
+        sources:
+        effects:
+          - Counting.runner.start
+      - name: reaction_3
+        priority: 3
+        level: 7
+        triggers:
+          - Counting.runner.finished
+        sources:
+        effects:
+          - Counting.runner.nextIteration
+          - Counting.runner.done
+      - name: reaction_4
+        priority: 4
+        level: 8
+        triggers:
+          - Counting.runner.done
+        sources:
+        effects:
+  Counting.counter:
+    name: counter
+    container: Counting
+    reactor_instances:
+    inputs:
+      inReset:
+        upstream_port: Counting.producer.outResetCounter
+        downstream_ports: 
+        trigger_of: 
+          - Counting.counter.reaction_1
+        source_of: 
+        effect_of: 
+      inIncrement:
+        upstream_port: Counting.producer.outIncrement
+        downstream_ports: 
+        trigger_of: 
+          - Counting.counter.reaction_2
+        source_of: 
+        effect_of: 
+      inRetrieveResult:
+        upstream_port: Counting.producer.outRetrieveResult
+        downstream_ports: 
+        trigger_of: 
+          - Counting.counter.reaction_3
+        source_of: 
+        effect_of: 
+    outputs:
+      outSendResult:
+        upstream_port: null
+        downstream_ports: 
+          - Counting.producer.inResult
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - Counting.counter.reaction_3
+    triggers:
+      - name: startup
+        type: startup
+        trigger_of:
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 3
+        triggers:
+          - Counting.counter.inReset
+        sources:
+        effects:
+      - name: reaction_2
+        priority: 2
+        level: 4
+        triggers:
+          - Counting.counter.inIncrement
+        sources:
+        effects:
+      - name: reaction_3
+        priority: 3
+        level: 5
+        triggers:
+          - Counting.counter.inRetrieveResult
+        sources:
+        effects:
+          - Counting.counter.outSendResult
+reaction_dependencies:
+  - from: Counting.producer.reaction_1
+  - to: Counting.runner.reaction_2
+  - from: Counting.producer.reaction_3
+  - to: Counting.counter.reaction_3
+  - from: Counting.producer.reaction_2
+  - to: Counting.producer.reaction_1
+  - from: Counting.producer.reaction_3
+  - to: Counting.producer.reaction_2
+  - from: Counting.runner.reaction_3
+  - to: Counting.producer.reaction_3
+  - from: Counting.runner.reaction_2
+  - to: Counting.runner.reaction_1
+  - from: Counting.runner.reaction_3
+  - to: Counting.runner.reaction_2
+  - from: Counting.runner.reaction_4
+  - to: Counting.runner.reaction_3
+  - from: Counting.counter.reaction_1
+  - to: Counting.producer.reaction_1
+  - from: Counting.counter.reaction_2
+  - to: Counting.producer.reaction_2
+  - from: Counting.counter.reaction_3
+  - to: Counting.producer.reaction_2
+  - from: Counting.counter.reaction_2
+  - to: Counting.counter.reaction_1
+  - from: Counting.counter.reaction_3
+  - to: Counting.counter.reaction_2

@@ -1,0 +1,244 @@
+---
+top_level_instances:
+  - PingPong
+all_reactor_instances:
+  PingPong:
+    name: PingPong
+    container: null
+    reactor_instances:
+      - PingPong.ping
+      - PingPong.runner
+      - PingPong.pong
+    inputs:
+    outputs:
+    triggers:
+      - name: startup
+        type: startup
+        trigger_of:
+          - PingPong.reaction_1
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 0
+        triggers:
+          - PingPong.startup
+        sources:
+        effects:
+  PingPong.ping:
+    name: ping
+    container: PingPong
+    reactor_instances:
+    inputs:
+      inStart:
+        upstream_port: PingPong.runner.start
+        downstream_ports: 
+        trigger_of: 
+          - PingPong.ping.reaction_1
+        source_of: 
+        effect_of: 
+      inPong:
+        upstream_port: PingPong.pong.outPong
+        downstream_ports: 
+        trigger_of: 
+          - PingPong.ping.reaction_3
+        source_of: 
+        effect_of: 
+    outputs:
+      outFinished:
+        upstream_port: null
+        downstream_ports: 
+          - PingPong.runner.finished
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - PingPong.ping.reaction_3
+      outPing:
+        upstream_port: null
+        downstream_ports: 
+          - PingPong.pong.inPing
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - PingPong.ping.reaction_2
+    triggers:
+      - name: serve
+        type: logical action
+        trigger_of:
+          - PingPong.ping.reaction_2
+        effect_of:
+          - PingPong.ping.reaction_1
+          - PingPong.ping.reaction_3
+      - name: startup
+        type: startup
+        trigger_of:
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 2
+        triggers:
+          - PingPong.ping.inStart
+        sources:
+        effects:
+          - PingPong.ping.serve
+      - name: reaction_2
+        priority: 2
+        level: 3
+        triggers:
+          - PingPong.ping.serve
+        sources:
+        effects:
+          - PingPong.ping.outPing
+      - name: reaction_3
+        priority: 3
+        level: 5
+        triggers:
+          - PingPong.ping.inPong
+        sources:
+        effects:
+          - PingPong.ping.outFinished
+          - PingPong.ping.serve
+  PingPong.runner:
+    name: runner
+    container: PingPong
+    reactor_instances:
+    inputs:
+      finished:
+        upstream_port: PingPong.ping.outFinished
+        downstream_ports: 
+        trigger_of: 
+          - PingPong.runner.reaction_3
+        source_of: 
+        effect_of: 
+    outputs:
+      start:
+        upstream_port: null
+        downstream_ports: 
+          - PingPong.ping.inStart
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - PingPong.runner.reaction_2
+    triggers:
+      - name: nextIteration
+        type: logical action
+        trigger_of:
+          - PingPong.runner.reaction_2
+        effect_of:
+          - PingPong.runner.reaction_1
+          - PingPong.runner.reaction_3
+      - name: done
+        type: logical action
+        trigger_of:
+          - PingPong.runner.reaction_4
+        effect_of:
+          - PingPong.runner.reaction_3
+      - name: startup
+        type: startup
+        trigger_of:
+          - PingPong.runner.reaction_1
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 0
+        triggers:
+          - PingPong.runner.startup
+        sources:
+        effects:
+          - PingPong.runner.nextIteration
+      - name: reaction_2
+        priority: 2
+        level: 1
+        triggers:
+          - PingPong.runner.nextIteration
+        sources:
+        effects:
+          - PingPong.runner.start
+      - name: reaction_3
+        priority: 3
+        level: 6
+        triggers:
+          - PingPong.runner.finished
+        sources:
+        effects:
+          - PingPong.runner.nextIteration
+          - PingPong.runner.done
+      - name: reaction_4
+        priority: 4
+        level: 7
+        triggers:
+          - PingPong.runner.done
+        sources:
+        effects:
+  PingPong.pong:
+    name: pong
+    container: PingPong
+    reactor_instances:
+    inputs:
+      inPing:
+        upstream_port: PingPong.ping.outPing
+        downstream_ports: 
+        trigger_of: 
+          - PingPong.pong.reaction_1
+        source_of: 
+        effect_of: 
+    outputs:
+      outPong:
+        upstream_port: null
+        downstream_ports: 
+          - PingPong.ping.inPong
+        trigger_of: 
+        source_of: 
+        effect_of: 
+          - PingPong.pong.reaction_1
+    triggers:
+      - name: startup
+        type: startup
+        trigger_of:
+        effect_of:
+      - name: shutdown
+        type: shutdown
+        trigger_of:
+        effect_of:
+    reactions:
+      - name: reaction_1
+        priority: 1
+        level: 4
+        triggers:
+          - PingPong.pong.inPing
+        sources:
+        effects:
+          - PingPong.pong.outPong
+reaction_dependencies:
+  - from: PingPong.ping.reaction_1
+  - to: PingPong.runner.reaction_2
+  - from: PingPong.ping.reaction_3
+  - to: PingPong.pong.reaction_1
+  - from: PingPong.ping.reaction_2
+  - to: PingPong.ping.reaction_1
+  - from: PingPong.ping.reaction_3
+  - to: PingPong.ping.reaction_2
+  - from: PingPong.runner.reaction_3
+  - to: PingPong.ping.reaction_3
+  - from: PingPong.runner.reaction_2
+  - to: PingPong.runner.reaction_1
+  - from: PingPong.runner.reaction_3
+  - to: PingPong.runner.reaction_2
+  - from: PingPong.runner.reaction_4
+  - to: PingPong.runner.reaction_3
+  - from: PingPong.pong.reaction_1
+  - to: PingPong.ping.reaction_2
